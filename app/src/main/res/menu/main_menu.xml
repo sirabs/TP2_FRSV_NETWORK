@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/menu_mode_add_node" android:title="@string/add_object_mode" app:showAsAction="never"/>
+    <item android:id="@+id/menu_mode_add_edge" android:title="@string/add_connection_mode" app:showAsAction="never"/>
+    <item android:id="@+id/menu_mode_edit" android:title="@string/edit_mode" app:showAsAction="never"/>
+    <item android:id="@+id/menu_reset" android:title="@string/reset_network" app:showAsAction="never"/>
+    <item android:id="@+id/menu_save" android:title="@string/save_network" app:showAsAction="never"/>
+    <item android:id="@+id/menu_choose_plan" android:title="@string/choose_plan" app:showAsAction="never"/>
+    <item android:id="@+id/menu_load" android:title="@string/load_network" app:showAsAction="never"/>
+    <item android:id="@+id/menu_send_mail" android:title="@string/send_by_email" app:showAsAction="never"/>
+</menu>

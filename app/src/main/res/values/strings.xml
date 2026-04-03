@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Network BahAbdoulaye/CritieYann</string>
+    <string name="reset_network">Réinitialiser le réseau</string>
+    <string name="save_network">Sauvegarder le réseau</string>
+    <string name="load_network">Afficher un réseau sauvegardé</string>
+    <string name="send_by_email">Envoyer le réseau par mail</string>
+    <string name="add_object_mode">Mode ajout d\'objets</string>
+    <string name="add_connection_mode">Mode ajout de connexions</string>
+    <string name="edit_mode">Mode modification</string>
+    <string name="add_object_title">Ajouter un objet</string>
+    <string name="add_object_message">Entrez une étiquette pour le nouvel objet :</string>
+    <string name="add">Ajouter</string>
+    <string name="cancel">Annuler</string>
+    <string name="save">Sauvegarder</string>
+    <string name="load">Charger</string>
+    <string name="reset">Réinitialiser</string>
+    <string name="save_title">Sauvegarder</string>
+    <string name="save_hint">Nom de la sauvegarde</string>
+    <string name="saved">Réseau sauvegardé</string>
+    <string name="load_title">Charger un réseau</string>
+    <string name="no_save">Aucune sauvegarde trouvée</string>
+    <string name="load_error">Erreur de chargement</string>
+    <string name="add_edge_title">Ajouter une connexion</string>
+    <string name="edge_label_hint">Étiquette de la connexion</string>
+    <string name="edge_exists">Connexion déjà existante ou boucle impossible</string>
+    <string name="object_name">Nom :</string>
+    <string name="object_type">Type :</string>
+    <string name="object_color">Couleur :</string>
+    <string name="object_thickness">Épaisseur :</string>
+    <string name="edit_object_title">Modifier l\'objet</string>
+    <string name="edit_connection_title">Modifier la connexion</string>
+    <string name="connection_label">Connexion</string>
+    <string name="delete">Supprimer</string>
+    <string name="edit">Modifier</string>
+    <string name="ok">OK</string>
+    <string name="plan">Plan</string>
+    <string name="choose_plan">Choisir un plan</string>
+    <string name="color_red">Rouge</string>
+    <string name="color_green">Vert</string>
+    <string name="color_blue">Bleu</string>
+    <string name="color_orange">Orange</string>
+    <string name="color_cyan">Cyan</string>
+    <string name="color_magenta">Magenta</string>
+    <string name="color_black">Noir</string>
+    <string name="type_bulb">Ampoule connectée</string>
+    <string name="type_thermostat">Thermostat</string>
+    <string name="type_camera">Caméra sécurité</string>
+    <string name="type_lock">Serrure connectée</string>
+    <string name="type_smoke">Alerte Incendie</string>
+    <string name="type_plug">Prise connectée</string>
+    <string name="type_router">Routeur / Hub</string>
+    <string name="object_default">Objet</string>
+    <string name="email_subject">Mon réseau connecté</string>
+    <string name="email_body">Voici mon réseau d\'objets connectés.</string>
+    <string name="email_error">Erreur lors de la création de l\'image</string>
+</resources>
