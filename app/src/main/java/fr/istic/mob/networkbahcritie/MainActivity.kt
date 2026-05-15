@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
     private lateinit var graphView: GraphView
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -174,21 +175,29 @@ class MainActivity : AppCompatActivity() {
         var isDragging = false
         var lastX = 0f
         var lastY = 0f
+        var isScrolling = false
 
         val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
 
             override fun onSingleTapUp(e: MotionEvent): Boolean {
-                if (viewModel.mode.value == EditMode.EDIT) {
-                    val obj = viewModel.findObjectAt(e.x, e.y)
-                    if (obj != null) {
-                        showObjectContextMenu(obj.id, obj.label, obj.color)
-                        return true
+                when (viewModel.mode.value) {
+                    EditMode.EDIT -> {
+                        val obj = viewModel.findObjectAt(e.x, e.y)
+                        if (obj != null) {
+                            showObjectContextMenu(obj.id, obj.label, obj.color)
+                            return true
+                        }
+                        val conn = viewModel.findConnectionAt(e.x, e.y)
+                        if (conn != null) {
+                            showConnectionContextMenu(conn)
+                            return true
+                        }
                     }
-                    val conn = viewModel.findConnectionAt(e.x, e.y)
-                    if (conn != null) {
-                        showConnectionContextMenu(conn)
-                        return true
+                    EditMode.ADD_NODE -> {
+
+                        return false
                     }
+                    else -> return false
                 }
                 return false
             }
@@ -215,6 +224,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+
+
 
         graphView.setOnTouchListener { _, event ->
             when (viewModel.mode.value) {
@@ -280,6 +291,7 @@ class MainActivity : AppCompatActivity() {
                             } else {
                                 if (distance > 10f) {
                                     isDragging = true
+                                    isScrolling = true
                                     graphView.parent.requestDisallowInterceptTouchEvent(false)
                                 }
                                 gestureDetector.onTouchEvent(event)
@@ -290,8 +302,10 @@ class MainActivity : AppCompatActivity() {
                             viewModel.unselectObject()
                             selectedConnectionId = null
                             val wasDragging = isDragging
+                            val wasScrolling = isScrolling
                             isDragging = false
-                            if (!wasDragging) {
+                            isScrolling = false
+                            if (!wasDragging && !wasScrolling) {
                                 gestureDetector.onTouchEvent(event)
                             }
                         }
@@ -392,7 +406,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun sendNetworkByEmail() {
-        
+
         val bitmap = Bitmap.createBitmap(graphView.width, graphView.height, Bitmap.Config.ARGB_8888)
         val canvas = android.graphics.Canvas(bitmap)
         graphView.draw(canvas)
