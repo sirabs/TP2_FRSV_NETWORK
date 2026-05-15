@@ -176,6 +176,23 @@ class MainActivity : AppCompatActivity() {
         var lastY = 0f
 
         val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
+
+            override fun onSingleTapUp(e: MotionEvent): Boolean {
+                if (viewModel.mode.value == EditMode.EDIT) {
+                    val obj = viewModel.findObjectAt(e.x, e.y)
+                    if (obj != null) {
+                        showObjectContextMenu(obj.id, obj.label, obj.color)
+                        return true
+                    }
+                    val conn = viewModel.findConnectionAt(e.x, e.y)
+                    if (conn != null) {
+                        showConnectionContextMenu(conn)
+                        return true
+                    }
+                }
+                return false
+            }
+
             override fun onLongPress(e: MotionEvent) {
                 if (isDragging) return
                 viewModel.unselectObject()
@@ -186,18 +203,13 @@ class MainActivity : AppCompatActivity() {
                             showObjectContextMenu(obj.id, obj.label, obj.color)
                         } else {
                             val conn = viewModel.findConnectionAt(e.x, e.y)
-                            if (conn != null) {
-                                showConnectionContextMenu(conn)
-                            }
+                            if (conn != null) showConnectionContextMenu(conn)
                         }
                     }
                     EditMode.ADD_NODE -> {
                         val conn = viewModel.findConnectionAt(e.x, e.y)
-                        if (conn != null) {
-                            showConnectionContextMenu(conn)
-                        } else {
-                            viewModel.onAddObjectRequested(e.x, e.y)
-                        }
+                        if (conn != null) showConnectionContextMenu(conn)
+                        else viewModel.onAddObjectRequested(e.x, e.y)
                     }
                     else -> {}
                 }
@@ -246,20 +258,30 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                         MotionEvent.ACTION_MOVE -> {
+                            val dx = event.x - lastX
+                            val dy = event.y - lastY
+                            val distance = kotlin.math.sqrt(dx * dx + dy * dy)
+
                             if (viewModel.hasSelectedObject()) {
-                                isDragging = true // ← marquer qu'on drague
-                                graphView.parent.requestDisallowInterceptTouchEvent(true)
-                                val dx = event.x - lastX
-                                val dy = event.y - lastY
-                                viewModel.moveSelectedObjectBy(dx, dy)
-                                lastX = event.x
-                                lastY = event.y
-                                graphView.invalidate()
+                                if (distance > 10f) isDragging = true
+                                if (isDragging) {
+                                    graphView.parent.requestDisallowInterceptTouchEvent(true)
+                                    viewModel.moveSelectedObjectBy(dx, dy)
+                                    lastX = event.x
+                                    lastY = event.y
+                                    graphView.invalidate()
+                                }
                             } else if (selectedConnectionId != null) {
-                                isDragging = true
-                                viewModel.updateConnectionCurvature(selectedConnectionId!!, event.x, event.y)
-                                graphView.invalidate()
+                                if (distance > 10f) isDragging = true
+                                if (isDragging) {
+                                    viewModel.updateConnectionCurvature(selectedConnectionId!!, event.x, event.y)
+                                    graphView.invalidate()
+                                }
                             } else {
+                                if (distance > 10f) {
+                                    isDragging = true
+                                    graphView.parent.requestDisallowInterceptTouchEvent(false)
+                                }
                                 gestureDetector.onTouchEvent(event)
                             }
                         }
@@ -267,8 +289,9 @@ class MainActivity : AppCompatActivity() {
                             graphView.parent.requestDisallowInterceptTouchEvent(false)
                             viewModel.unselectObject()
                             selectedConnectionId = null
+                            val wasDragging = isDragging
                             isDragging = false
-                            if (!isDragging) {
+                            if (!wasDragging) {
                                 gestureDetector.onTouchEvent(event)
                             }
                         }
@@ -369,7 +392,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun sendNetworkByEmail() {
-        // Capturer la GraphView en bitmap
+        
         val bitmap = Bitmap.createBitmap(graphView.width, graphView.height, Bitmap.Config.ARGB_8888)
         val canvas = android.graphics.Canvas(bitmap)
         graphView.draw(canvas)
@@ -393,7 +416,7 @@ class MainActivity : AppCompatActivity() {
             file
         )
 
-        // Créer l'intent d'envoi
+
         val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
             type = "image/png"
             putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.email_subject))
